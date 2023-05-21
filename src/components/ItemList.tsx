@@ -39,8 +39,9 @@ const ItemList: React.FC = () => {
   const addItem = () => {
     if (currentItem.trim() !== '') {
       setItemList(prevItems => [...prevItems, { item: currentItem, category }]);
-      setCurrentItem('');
-      setSuggestions([]);
+      setCategory(''); // Reset category
+      setCurrentItem(''); // Reset input
+      setSuggestions([]); // Reset suggestions
     }
   };
 
