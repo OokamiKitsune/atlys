@@ -37,9 +37,9 @@ const ItemList: React.FC = () => {
   }
   // Add item to list
   const addItem = () => {
-    if (currentItem.trim() !== '') {
-      setItemList(prevItems => [...prevItems, { item: currentItem, category }]);
-      setCategory(''); // Reset category
+    if (currentItem.trim() !== '') { // Don't add empty strings
+      setItemList(prevItems => [...prevItems, { item: currentItem, category }]); // Add item to list
+      setCategory(''); // Reset category 
       setCurrentItem(''); // Reset input
       setSuggestions([]); // Reset suggestions
     }
@@ -82,18 +82,22 @@ const ItemList: React.FC = () => {
   };
 
   return (
-    <div className="text-lg">
-      <h1>{kartname}</h1>
+    <div className="text-center text-lg">
+        <h1>Your Lists</h1>
+      <h3>{kartname}</h3>
       <input 
         type="text"
         value={kartname}
+        className='border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
         onChange={e => saveKartname(e.target.value)}
         placeholder="Enter Kart Name"
         />
       <ul>
+
         <input
           type="text"
           value={currentItem}
+          className='border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
           onChange={e => handleInputChange(e.target.value)}
           onKeyPress={e => {
             if (e.key === 'Enter') {
@@ -105,20 +109,38 @@ const ItemList: React.FC = () => {
         <input 
           type="text"
           value={category}
+          className='border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
           onChange={e => setCategory(e.target.value)}
           placeholder="Enter category"
         />
-        <button onClick={addItem}>＋Add</button>
-        <div className="">
-          <h2>Items</h2>
+        <div className="container mx-auto px-4 py-4 border">
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onClick={addItem}
+      >
+        <b>＋Add</b>
+      </button>
+    </div>
+
+
+        <div className='container mx-auto px-4 py-4 border'>
+        <div className="text-purple-800 container">
+          <h1><b>Items</b></h1>
           {itemList.map((item, index) => (
             <li key={index}>
               <span>{item.item}</span>  <span>{item.category}</span>
-              <button onClick={() => removeItem(index)}>－Remove</button>
-              
+              <div className='container mx-auto px-4 py-4 border'>
+              <button
+                className='bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-1 rounded'
+                onClick={() => removeItem(index)}>－Remove
+              </button>
+              </div>
             </li>
           ))}
         </div>
+        </div>
+        
+        
       </ul>
       <ul>
         {suggestions.map((suggestion, index) => (
@@ -128,6 +150,7 @@ const ItemList: React.FC = () => {
         ))}
       </ul>
     </div>
+        
   );
 };
 
