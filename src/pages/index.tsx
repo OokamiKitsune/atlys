@@ -1,26 +1,19 @@
 import React from 'react';
-import '../global.css';
 import 'tailwindcss/tailwind.css';
 import ItemList from '@/components/ItemList';
-import Menubar from '@/components/MenuBar';
+import Layout from '@/components/Layout';
 
 // Import any other components or modules you need
 const IndexPage: React.FC = () => {
     return (
-      <>
-      <div className="text-center text-2xl">
-        <Menubar />
-      </div>
-
-
-      <div className="text-3xl text-center">
-          <ItemList />
-        </div>
-      
-      </>
-
-    );
-  };
+        <Layout>
+          {/* Your page content goes here */}
+          <div className="container mx-auto px-4 py-4 border">
+            <ItemList />
+          </div>
+        </Layout>
+      );
+    };
   
   export default IndexPage;
   

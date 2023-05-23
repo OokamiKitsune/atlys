@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import itemData from '../items.json';
 import 'tailwindcss/tailwind.css';
+import { DeleteForever } from '@mui/icons-material';
 
 const ItemList: React.FC = () => {
   const [itemList, setItemList] = useState<{ item: string; category: string }[]>([]);
@@ -128,13 +129,15 @@ const ItemList: React.FC = () => {
           <h1><b>Items</b></h1>
           {itemList.map((item, index) => (
             <li key={index}>
-              <span>{item.item}</span>  <span>{item.category}</span>
-              <div className='container mx-auto px-4 py-4 border'>
+              <span>{item.item}</span>  <span>{item.category}</span> 
+
               <button
-                className='bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-1 rounded'
-                onClick={() => removeItem(index)}>－Remove
+                className='bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded'
+                onClick={() => removeItem(index)}><DeleteForever />
+                
+                
               </button>
-              </div>
+            
             </li>
           ))}
         </div>
