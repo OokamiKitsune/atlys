@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import itemData from '../items.json';
 import 'tailwindcss/tailwind.css';
 import { DeleteForever, SmartButton, Edit } from '@mui/icons-material';
+import { count } from 'console';
 
 const ItemList: React.FC = () => {
   const [itemList, setItemList] = useState<{ item: string; category: string }[]>([]);
@@ -47,6 +48,13 @@ const ItemList: React.FC = () => {
   };
 
 
+  // Count items in list and display them in the UI. If there are no items, display a message.
+    const countItems = itemList.length > 0 ? itemList.length : 'No items yet.';
+    // If the number of items is greater than 10, display a warning.
+    const countItemsClass = itemList.length > 20 ? '🔥' : '';
+
+
+
   // Remove item from list
   const removeItem = (index: number) => {
     setItemList(prevItems => {
@@ -56,6 +64,11 @@ const ItemList: React.FC = () => {
     });
   };
 
+
+  // Clear all items from list
+    const clearItems = () => {
+    setItemList([]);
+    };
 
   // Filter suggestions
   const filterSuggestions = (input: string) => {
@@ -84,12 +97,13 @@ const ItemList: React.FC = () => {
 
   return (
     <div className="text-center text-lg">
-        <h1>Your Lists</h1>
         <div className='text-3xl text-left font-bold'>
+            <p></p>
       <h3>{kartname} <Edit /></h3>
         </div>
-        <div className='text-sm text-left'>
-      <p>Items in this list: </p>
+        <div className='text-lg text-left'>
+            <p>Created: </p>
+      <p>Items: {countItems} {countItemsClass}</p>
       </div>
       <input 
         type="text"
@@ -110,9 +124,15 @@ const ItemList: React.FC = () => {
               addItem();
             }
           }}
-          placeholder="Enter item name"
+          placeholder="Type your item here and press enter"
         />
         <ul>
+        
+        
+        
+
+        
+        
         <input 
           type="text"
           value={category}
@@ -128,9 +148,9 @@ const ItemList: React.FC = () => {
       </button>
 
       <button
-        className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded w-full"
-        >
+        className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded w-full">
             <b>Recipe ideas</b> <SmartButton />
+            
         </button>
     </div>
 
@@ -140,11 +160,19 @@ const ItemList: React.FC = () => {
           <div className='text-3xl text-purple-800'>
           <h1><b>Items</b></h1>
           </div>
-          
+          <button
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full">
+            <b>Clear all items</b> <DeleteForever />
+            </button>
           <div className="text-purple-800 container text-3xl text-left">
           {itemList.map((item, index) => (
             <li key={index}>
-              <span>{item.item}</span>  <span>{item.category}</span> 
+              <span>{item.item}</span>
+              <div className='text-sm text-left flex flex-row bg-blue-500 text-white py-1 px-2 rounded'>
+                <div>{item.category}</div>
+                
+              </div>  
+              
             
             <div className='text-right'>
               <button
