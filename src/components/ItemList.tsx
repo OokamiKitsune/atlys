@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import itemData from '../items.json';
 import 'tailwindcss/tailwind.css';
 import { DeleteForever } from '@mui/icons-material';
+import { SmartButton } from '@mui/icons-material';
 
 const ItemList: React.FC = () => {
   const [itemList, setItemList] = useState<{ item: string; category: string }[]>([]);
@@ -89,16 +90,16 @@ const ItemList: React.FC = () => {
       <input 
         type="text"
         value={kartname}
-        className='border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+        className='border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4'
         onChange={e => saveKartname(e.target.value)}
         placeholder="Enter Kart Name"
         />
-      <ul>
+      <ul></ul>
 
         <input
           type="text"
           value={currentItem}
-          className='border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+          className='border border-gray-300 rounded-md px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 w-full'
           onChange={e => handleInputChange(e.target.value)}
           onKeyPress={e => {
             if (e.key === 'Enter') {
@@ -107,25 +108,31 @@ const ItemList: React.FC = () => {
           }}
           placeholder="Enter item name"
         />
+        <ul>
         <input 
           type="text"
           value={category}
-          className='border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+          className='border border-gray-300 rounded-md px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 w-full'
           onChange={e => setCategory(e.target.value)}
           placeholder="Enter category"
         />
         <div className="container mx-auto px-4 py-4 border">
       <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={addItem}
-      >
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 w-full"
+        onClick={addItem}>
         <b>＋Add</b>
       </button>
+
+      <button
+        className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded w-full"
+        >
+            <b>Recipe ideas</b> <SmartButton />
+        </button>
     </div>
 
 
         <div className='container mx-auto px-4 py-4 border'>
-        <div className="text-purple-800 container">
+        <div className="text-purple-800 container text-3xl">
           <h1><b>Items</b></h1>
           {itemList.map((item, index) => (
             <li key={index}>

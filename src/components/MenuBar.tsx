@@ -6,15 +6,16 @@ import { Login } from '@mui/icons-material';
 const Menubar: React.FC = () => {
     return (
         
-        <div className="bg-blue-700 text-white text-center text-2xl">
+        <div className="bg-slate-800 text-white text-center text-1xl bg-gradient-to-t">
             <div className="container mx-auto px-4">
-            <div className="flex justify-between py-4">
+            <div className="flex justify-between py-5">
             <div>
-                <a href="#" className="text-4xl font-bold">🛒</a>
+                <a href="#" className="text-2xl">🛒 Smart Kart</a>
             </div>
             <nav>
                 <ul className="flex space-x-4">
-                    <li><a href="#" className="px-2 py-1 text-gray-400 hover:text-white">Login <Login /></a></li>
+                    <li><a href="#" className="bg-purple-800 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded w-full">Login <Login /></a></li>
+                    
                     </ul>
             </nav>
             </div>
