@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import itemData from '../items.json';
 import 'tailwindcss/tailwind.css';
-import { DeleteForever } from '@mui/icons-material';
-import { SmartButton } from '@mui/icons-material';
+import { DeleteForever, SmartButton, Edit } from '@mui/icons-material';
 
 const ItemList: React.FC = () => {
   const [itemList, setItemList] = useState<{ item: string; category: string }[]>([]);
@@ -86,7 +85,12 @@ const ItemList: React.FC = () => {
   return (
     <div className="text-center text-lg">
         <h1>Your Lists</h1>
-      <h3>{kartname}</h3>
+        <div className='text-3xl text-left font-bold'>
+      <h3>{kartname} <Edit /></h3>
+        </div>
+        <div className='text-sm text-left'>
+      <p>Items in this list: </p>
+      </div>
       <input 
         type="text"
         value={kartname}
@@ -132,18 +136,29 @@ const ItemList: React.FC = () => {
 
 
         <div className='container mx-auto px-4 py-4 border'>
-        <div className="text-purple-800 container text-3xl">
+          
+          <div className='text-3xl text-purple-800'>
           <h1><b>Items</b></h1>
+          </div>
+          
+          <div className="text-purple-800 container text-3xl text-left">
           {itemList.map((item, index) => (
             <li key={index}>
               <span>{item.item}</span>  <span>{item.category}</span> 
-
+            
+            <div className='text-right'>
               <button
-                className='bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded'
+                className='bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded'
                 onClick={() => removeItem(index)}><DeleteForever />
-                
-                
-              </button>
+                </button>  
+            </div>
+
+            <div className='text-right'>
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                onClick={() => removeItem(index)}><Edit />
+                </button>  
+            </div>
             
             </li>
           ))}
