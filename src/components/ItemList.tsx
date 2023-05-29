@@ -198,7 +198,8 @@ const ItemList: React.FC = () => {
       <ul>
         {suggestions.map((suggestion, index) => (
           <li key={index} onClick={() => setCurrentItem(suggestion)}>
-            {suggestion}
+            <h2>Suggestions</h2>
+            <p>{suggestion}</p>
           </li>
         ))}
       </ul>

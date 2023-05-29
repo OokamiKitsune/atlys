@@ -5,6 +5,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
+const name = ['Your Name'];
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div>
