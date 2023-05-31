@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 const KartLists: React.FC = () => {
     // Create state for kart list
     
-    const [karts, setKarts] = useState<{ id: number; name: string; description: string; date: Date; item_count: number}[]>([]);
+    const [karts, setKarts] = useState<{ id: string; name: string; description: string; date: Date; item_count: number}[]>([]);
     
     
     // Creating a new kart
@@ -38,7 +38,7 @@ const KartLists: React.FC = () => {
         // Create a new kart object
         
         const newKartObject = {
-            id: Math.floor(Math.random() * 10000) + 1,
+            id: uuidv4(),
             name: newKart,
             description: newDescription,
             date: new Date(),
@@ -54,7 +54,7 @@ const KartLists: React.FC = () => {
 }; // End of handelFormSubmit
     
     // Delete a kart
-    const deleteKart = (id: number) => {
+    const deleteKart = (id: string) => {
         confirm('Are you sure you want to delete this kart?');
         // Filter out the kart with the matching id
         const filteredKarts = karts.filter((karts) => karts.id !== id);
