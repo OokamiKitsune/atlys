@@ -54,12 +54,16 @@ const KartLists: React.FC = () => {
 }; // End of handelFormSubmit
     
     // Delete a kart
-    const deleteKart = (id: string) => {
-        confirm('Are you sure you want to delete this kart?');
+    const deleteKart = (id: string, name: string) => {
+        const kartName = name;
+        const confirmDelete = confirm('Are you sure you want to delete the ' + kartName + ' kart?');
         // Filter out the kart with the matching id
         const filteredKarts = karts.filter((karts) => karts.id !== id);
         // Update the kart list
-        setKarts(filteredKarts);
+        if (confirmDelete === true) {
+            setKarts(filteredKarts);
+
+        };
     }; // End of deleteKart
     
     
@@ -77,7 +81,7 @@ const KartLists: React.FC = () => {
                     <p>Current items: {kart.item_count}</p>
                     <p>Created: {kart.date.toLocaleDateString()}</p>
                     <p>{kart.id}</p>
-                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" onClick={() => deleteKart(kart.id)}><DeleteForever /></button>
+                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" onClick={() => deleteKart(kart.id, kart.name)}><DeleteForever /></button>
                     </div>
                 </div>
 
