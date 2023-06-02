@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '@/components/Layout';
 
+
 const LoginPage: React.FC = () => {
   return (
     <Layout>
