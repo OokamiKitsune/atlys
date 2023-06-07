@@ -1,6 +1,20 @@
 import React from 'react';
 import Layout from '@/components/Layout';
+import { Login } from '@mui/icons-material';
+import {signIn, signOut, useSession} from 'next-auth/client'; 
 
+
+// Example usage
+const LoginPage = () => {
+  const [session, loading] = useSession();
+
+  const handleSignIn = () => {
+    signIn('Google'); // Replace 'provider-name' with your chosen authentication provider
+  };
+
+  const handleSignOut = () => {
+    signOut();
+  };
 
 const LoginPage: React.FC = () => {
   return (
@@ -12,5 +26,5 @@ const LoginPage: React.FC = () => {
     </Layout>
   );
 };
-
+};
 export default LoginPage;
