@@ -10,6 +10,7 @@ import ItemList from './ItemList';
 
 
 
+
 const KartLists: React.FC = () => {
     // Create state for kart list
     
@@ -37,7 +38,7 @@ const KartLists: React.FC = () => {
     // Add the current date of when the kart was created
     const [date, setDate] = useState(new Date());
     
-    
+
     // Add a new kart
     const handelFormSubmit = (e: React.FormEvent<HTMLFormElement>) => { // e is the event object
         e.preventDefault(); // Prevent the page from reloading
@@ -199,21 +200,23 @@ const KartLists: React.FC = () => {
     <div key={kart.id}>
       <div className="container mx-auto px-4 py-4 border flex items-center justify-between my-4">
         <div className="flex flex-col">
-          <h2 className="text-3xl text-purple-500 overflow-hidden overflow-ellipsis max-w-xs font-medium">
+          <h2 className="text-3xl text-purple-500 max-w-xs font-medium">
             {kart.name}
           </h2>
           <div className="flex flex-col items-start">
-            <p className="text-lg text-gray-600 mb-1 max-w-xs overflow-hidden overflow-ellipsis">
-              Details: {kart.description}
+            <p className="text-lg text-gray-600 mb-5 max-w-xs overflow-hidden overflow-ellipsis">
+              Description: {kart.description}
             </p>
-            <p className="text-lg text-gray-600 mb-1 max-w-xs">
-              Current items: {kart.item_count}
+            <p className="text-lg text-gray-600 mb-5 max-w-xs">
+              Stock: {kart.item_count === 0 ? (<span className="text-red-500 font-bold animate-pulse">Out of Stock</span>) : (<span className="text-green-500">{kart.item_count}</span>)}
             </p>
-            <p className="text-lg text-gray-600 mb-1 max-w-xs">
-              Created: {kart.date.toLocaleDateString()}
+            <p className="text-xs text-gray-600 mb-0 max-w-xs">
+              <b>Created:</b> {kart.date.toLocaleDateString()}
             </p>
-            <p className="text-xs text-gray-500 mb-1 max-w-xs">
-              ID: {kart.id}</p>
+            <p className="text-xs text-gray-600 mb-0 max-w-xs">
+              <b>Last Updated:</b> {kart.updated.toISOString().slice()} UTC</p>
+            <p className="text-xs text-gray-500 mb-0 max-w-xs font-mono">
+              <b>ID:</b> {kart.id}</p>
           </div>
         </div>
         <div className="flex flex-col">
