@@ -22,12 +22,22 @@ const KartLists: React.FC = () => {
         date: Date;
         updated: Date;
         status: string;
+        version: number;
         item_count: number;
-        itemList: {
+        serial_number: string;
+        buildable: boolean;
+        cost_estimate: number;
+        images: string;
+        components: {
           id: string;
           name: string;
           description: string;
+          required: boolean;
+          status: string;
+          cost: number;
           item_count: number;
+          part_number: string;
+          images: string;
         }[];
       }[]
     >([]);
@@ -63,7 +73,12 @@ const KartLists: React.FC = () => {
             updated: new Date(),
             status: 'active',
             item_count : 0,
-            itemList: [], // Initialize the item list to an empty array
+            serial_number: '',
+            cost_estimate: 0,
+            images: '',
+            buildable: false,
+            version: 0,
+            components: [], // Initialize the item list to an empty array
     };
     // add the new kart to the kart list
     setKarts([...karts, newKartObject]);
@@ -181,7 +196,7 @@ const KartLists: React.FC = () => {
         };
 
         const updatedKarts = [...karts]; // Create a copy of the karts array
-        updatedKarts[kartIndex].itemList.push(newItem); 
+        updatedKarts[kartIndex].components.push(newItem); 
 
         setKarts(updatedKarts); // Update the karts state with the updated array
     }
@@ -223,7 +238,7 @@ const KartLists: React.FC = () => {
             <Button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded max-w-xs mb-1"
             onClick={() => addItems(kart.id, kart.name, kart.description, kart.item_count)}>
-            <ShoppingBag /> Add Items
+            <ShoppingBag /> Add Component
             </Button>
             
           <Button
