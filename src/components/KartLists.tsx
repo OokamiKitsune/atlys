@@ -9,85 +9,134 @@ import { Button, TextField, Dialog, DialogActions, DialogTitle, DialogContent } 
 import ItemList from './ItemList';
 
 
+// The data sctructure for a kart
+interface Kart {
+  id: string;
+  name: string;
+  description: string;
+  date: Date;
+  updated: Date;
+  status: string;
+  version: number;
+  item_count: number;
+  serial_number: string;
+  buildable: boolean;
+  cost_estimate: number;
+  images: string;
+  components: Component[];
+
+}
+
+interface Component {
+  id: string;
+  name: string;
+  description: string;
+  required: boolean;
+  status: string;
+  cost: number;
+  item_count: number;
+  part_number: string;
+  images: string;
+}
 
 
-const KartLists: React.FC = () => {
-    // Create state for kart list
+const KartLists: React.FC = () => { // FC = Functional Component. This is a React component that is a function.    
+    const [karts, setKarts] = useState<Kart[]>([]); // Initialize the state with an empty array. Within this array will be a list of Kart objects.
+
+
+    // Load the kart list from local storage
+    useEffect(() => {
+      const storedKarts = localStorage.getItem('karts');
+      console.log(storedKarts);
+      if (storedKarts) {
+        const parsedKarts: Kart[] = JSON.parse(storedKarts);
+        const kartsWithDateFixes = parsedKarts.map((kart) => ({
+          ...kart,
+          date: new Date(kart.date), // Convert the date string to a date object
+          updated: new Date(kart.updated), // Convert the date string to a date object
+        }));
+        setKarts(kartsWithDateFixes);
+      }
+    },[]);
+
+
+    // Initialize the state with an empty string for the kart name. This will be used to create a new kart.
+    const [newKart, setNewKart] = useState<Kart>({ 
+      // You need to add all the properties of the Kart object here. This is the same as the Kart interface.
+        id: '',
+        name: '',
+        description: '',
+        date: new Date(),
+        updated: new Date(),
+        status: '',
+        version: 0,
+        item_count: 0,
+        serial_number: '',
+        buildable: false,
+        cost_estimate: 0,
+        images: '',
+        components: [],
+      
+    }); 
+
+
+       // Create a new kart object
+        
+       const newKartObject: Kart = {
+        id: uuidv4(),
+        name: newKart.name,
+        description: newKart.description,
+        date: new Date(),
+        updated: new Date(),
+        status: 'active',
+        item_count : 0,
+        serial_number: '',
+        cost_estimate: 0,
+        images: '',
+        buildable: false,
+        version: 0,
+        components: [], // Initialize the item list to an empty array
+      };    
     
-    const [karts, setKarts] = useState<
-    {
-        id: string;
-        name: string;
-        description: string;
-        date: Date;
-        updated: Date;
-        status: string;
-        version: number;
-        item_count: number;
-        serial_number: string;
-        buildable: boolean;
-        cost_estimate: number;
-        images: string;
-        components: {
-          id: string;
-          name: string;
-          description: string;
-          required: boolean;
-          status: string;
-          cost: number;
-          item_count: number;
-          part_number: string;
-          images: string;
-        }[];
-      }[]
-    >([]);
-    
-    // Creating a new kart
-    const [newKart, setNewKart] = useState(''); // State variable for the new kart name. Set the default value to an empty string
-    const [newDescription, setNewDescription] = useState(''); // State variable for the new kart description. Set the default value to an empty string
-    // Add the current date of when the kart was created
-    const [date, setDate] = useState(new Date());
     
 
     // Add a new kart
+    // Add the current date of when the kart was created
+    const [date, setDate] = useState(new Date());
     const handelFormSubmit = (e: React.FormEvent<HTMLFormElement>) => { // e is the event object
         e.preventDefault(); // Prevent the page from reloading
         
         // Stop user from creating a kart with no name
-        if (newKart.trim() === '') {
-            alert('A kart name is required.');
-            // highlight the kart name input
+        if (newKart.name === '') {
+            alert('Error: Kart name cannot be empty.');
+            return; // Stop the function if the kart name is empty
+        };
 
-            
-            
-        return; // Stop the function if the kart name is empty
-    }
-        
-        // Create a new kart object
-        
-        const newKartObject = {
-            id: uuidv4(),
-            name: newKart,
-            description: newDescription,
-            date: new Date(),
-            updated: new Date(),
-            status: 'active',
-            item_count : 0,
-            serial_number: '',
-            cost_estimate: 0,
-            images: '',
-            buildable: false,
-            version: 0,
-            components: [], // Initialize the item list to an empty array
-    };
+
+
     // add the new kart to the kart list
     setKarts([...karts, newKartObject]);
 
-    setNewKart(''); // Reset the input
-    setNewDescription(''); // Reset the input
+    setNewKart({
+        id: uuidv4(),
+        name: '',
+        description: '',
+        date: new Date(),
+        updated: new Date(),
+        status: 'active',
+        item_count : 0,
+        serial_number: '',
+        cost_estimate: 0,
+        images: '',
+        buildable: false,
+        version: 0,
+        components: [], // Initialize the item list to an empty array
 
-    // Create new url with the new kart id
+    }); 
 
+    setNewDescription({
+      description: '',      
+    });
 
     
 }; // End of handelFormSubmit
@@ -170,6 +219,18 @@ const KartLists: React.FC = () => {
 
     }; // End of editKart
 
+
+    // Store kart properties in local storage
+    useEffect(() => {
+      localStorage.setItem('karts', JSON.stringify(karts))
+
+      return () => {
+        localStorage.removeItem('karts')
+      }
+    }, [karts]);
+
+    
+
     // Add items to a kart. 
 
 
@@ -188,15 +249,17 @@ const KartLists: React.FC = () => {
 
 
         // Create new item object
-        const newItem = {
+        const newComponent = {
             id: uuidv4(),
             name: newItemName,
             description: newItemDescription,
             item_count: 0,
+
+
         };
 
         const updatedKarts = [...karts]; // Create a copy of the karts array
-        updatedKarts[kartIndex].components.push(newItem); 
+        updatedKarts[kartIndex].components.push(newComponent); 
 
         setKarts(updatedKarts); // Update the karts state with the updated array
     }
@@ -268,7 +331,7 @@ const KartLists: React.FC = () => {
                     className='border border-gray-300 rounded-md px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 w-full'
                     type="text"
                     id="name"
-                    value={newKart}
+                    value={newKart.name}
                     placeholder='Enter Kart Name'
                     onChange={(e) => setNewKart(e.target.value)}
                     />
@@ -279,7 +342,7 @@ const KartLists: React.FC = () => {
                     className='border border-gray-300 rounded-md px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 w-full' 
                     type="text"
                     id="description"
-                    value={newDescription}
+                    value={newKart.description}
                     placeholder='Describe your kart'
                     onChange={(e) => setNewDescription(e.target.value)}
                     />
