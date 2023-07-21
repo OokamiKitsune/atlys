@@ -1,8 +1,9 @@
 // This component is the main component for the index page. It will show individual shopping lists.
 import React, { useState, useEffect } from 'react';
+import EditKartDialog from './EditKartDialog';
 import { useRouter } from 'next/router';
 import 'tailwindcss/tailwind.css';
-import { DeleteForever, SmartButton, Edit, ShoppingBag } from '@mui/icons-material';
+import { DeleteForever, SmartButton, Edit, ShoppingBag, UsbOffRounded, Inventory, Build, ShoppingBasketRounded } from '@mui/icons-material';
 import { Hash } from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 import { Button, TextField, Dialog, DialogActions, DialogTitle, DialogContent } from '@mui/material';
@@ -42,7 +43,8 @@ interface Component {
 
 const KartLists: React.FC = () => { // FC = Functional Component. This is a React component that is a function.    
     const [karts, setKarts] = useState<Kart[]>([]); // Initialize the state with an empty array. Within this array will be a list of Kart objects.
-
+    const [description, setDescription] = useState<string>('');
+    const [name, setName] = useState<string>('');
 
     // Load the kart list from local storage
     useEffect(() => {
@@ -59,10 +61,8 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
       }
     },[]);
 
-
-    // Initialize the state with an empty string for the kart name. This will be used to create a new kart.
-    const [newKart, setNewKart] = useState<Kart>({ 
-      // You need to add all the properties of the Kart object here. This is the same as the Kart interface.
+    
+    const [newKart, setNewKart] = useState<Kart>({ // 
         id: '',
         name: '',
         description: '',
@@ -78,68 +78,50 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
         components: [],
       
     }); 
+    
 
+        // Store kart properties in local storage
+        useEffect(() => {
+          localStorage.setItem('karts', JSON.stringify(karts))
+    
+          return () => {
+            localStorage.removeItem('karts')
+          }
+        }, [karts]);
 
-       // Create a new kart object
-        
-       const newKartObject: Kart = {
+    const handelSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault(); // 
+    
+      if (name.trim() === '') {
+        alert('Error: Kart name cannot be empty.');
+        return;
+      }
+      if (description.trim() === '') {
+        alert('Error: Kart description cannot be empty.');
+        return;
+      }
+    
+      const newKart: Kart = {
         id: uuidv4(),
-        name: newKart.name,
-        description: newKart.description,
+        name: name,
+        description: description,
         date: new Date(),
         updated: new Date(),
-        status: 'active',
-        item_count : 0,
+        status: 'NYI',
+        item_count: 0,
         serial_number: '',
         cost_estimate: 0,
         images: '',
         buildable: false,
         version: 0,
-        components: [], // Initialize the item list to an empty array
-      };    
+        components: [],
+      };
     
-    
-
-    // Add a new kart
-    // Add the current date of when the kart was created
-    const [date, setDate] = useState(new Date());
-    const handelFormSubmit = (e: React.FormEvent<HTMLFormElement>) => { // e is the event object
-        e.preventDefault(); // Prevent the page from reloading
-        
-        // Stop user from creating a kart with no name
-        if (newKart.name === '') {
-            alert('Error: Kart name cannot be empty.');
-            return; // Stop the function if the kart name is empty
-        };
-
-
-
-    // add the new kart to the kart list
-    setKarts([...karts, newKartObject]);
-
-    setNewKart({
-        id: uuidv4(),
-        name: '',
-        description: '',
-        date: new Date(),
-        updated: new Date(),
-        status: 'active',
-        item_count : 0,
-        serial_number: '',
-        cost_estimate: 0,
-        images: '',
-        buildable: false,
-        version: 0,
-        components: [], // Initialize the item list to an empty array
-
-    }); 
-
-    setNewDescription({
-      description: '',      
-    });
-
-    
-}; // End of handelFormSubmit
+      setName(''); // Reset the name state to an empty string
+      setDescription(''); // Reset the description state to an empty string
+      setKarts([...karts, newKart]);
+      
+    };
     
     // Delete a kart
     const deleteKart = (id: string, name: string) => {
@@ -154,84 +136,98 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
         };
     }; // End of deleteKart
 
-    // Edit a kart
-    const editKart = (id: string, name: string, description: string) => {
-        const kartIndex = karts.findIndex((karts) => karts.id === id);
-
-        if (kartIndex === -1) {
-            alert('Error: Kart not found.');
-            return;
-        }
-
-        const originalKart = karts[kartIndex];
-        const updatedKart = { ...originalKart };
-
-        // Setup a state variable to hold updated values
-        const [editedName, setEditName] = useState(updatedKart.name); 
-        const [editedDescription, setEditDescription] = useState(updatedKart.description);
-
-        // Function to handel saving changes
-        const saveChanges = () => {
-            // Update the kart object with the edited values
-            updatedKart.name = editedName;
-            updatedKart.description = editedDescription;
-
-            // Create a new array with updated kart
-            const updatedKarts = [...karts];
-            updatedKarts[kartIndex] = updatedKart;
-
-            // Update the karts state with updated array
-            setKarts(updatedKarts);
-
-            // Close the modal or form overaly
-            const handleClose = () => {
-                // Add the nessary logic here to close the overaly
-                return;
-
-            };
-        };  // End of saveChanges
-        
-        return (
-            /* Edit Cart Dialog */
-
-        <Dialog open={true} onClose={handleClose}>
-            <DialogTitle>Edit Kart</DialogTitle>
-            <DialogContent>
-                <TextField
-                label="Kart Name"
-                value={editedName}
-                onChange={(e) => setEditedName(e.target.value)}
-                />
-                <TextField
-                label="Description"
-                value={editedDescription}
-                onChange={(e) => setEditedDescription(e.target.value)}
-                multiline
-                />
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={saveChanges} color="primary">
-                Save Changes
-                </Button>
-            </DialogActions>
-            </Dialog>
-        )
-
-    }; // End of editKart
 
 
-    // Store kart properties in local storage
-    useEffect(() => {
-      localStorage.setItem('karts', JSON.stringify(karts))
 
-      return () => {
-        localStorage.removeItem('karts')
-      }
-    }, [karts]);
+
+
+    // EditKartDialog component
+    
+    const EditKartDialog: React.FC<{
+      kart: Kart;
+      onSave: (name: string, description: string) => void;
+      onClose: () => void;
+    }> = ({ kart, onSave, onClose }) => {
+      const [editedName, setEditedName] = useState(kart.name);
+      const [editedDescription, setEditedDescription] = useState(kart.description);
+    
+      const saveChanges = () => {
+        // Perform the necessary actions to save changes
+        onSave(editedName, editedDescription);
+      };
+    
+      return (
+        <Dialog open={true} onClose={onClose}>
+          <DialogTitle>Edit Kart</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="Kart Name"
+              value={editedName}
+              onChange={(e) => setEditedName(e.target.value)}
+            />
+            <TextField
+              label="Description"
+              value={editedDescription}
+              onChange={(e) => setEditedDescription(e.target.value)}
+              multiline
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={saveChanges} color="primary">
+              Save Changes
+            </Button>
+          </DialogActions>
+        </Dialog>
+      );
+    };
+
+
+
+
+// Edit a kart
+const editKart = (id: string, name: string, description: string) => {
+  const kartIndex = karts.findIndex((kart) => kart.id === id);
+
+  if (kartIndex === -1) {
+    alert('Error: Kart not found.');
+    return;
+  }
+
+  const originalKart = karts[kartIndex];
+
+  const handleSave = (editedName: string, editedDescription: string) => {
+    // Update the kart object with the edited values
+    originalKart.name = editedName;
+    originalKart.description = editedDescription;
+
+    // Create a new array with updated kart
+    const updatedKarts = [...karts];
+    updatedKarts[kartIndex] = originalKart;
+
+    // Update the karts state with the updated array
+    setKarts(updatedKarts);
+
+    // Close the modal or form overlay
+    handleClose(); // Make sure to define handleClose outside of editKart
+  };
+
+  const handleClose = () => {
+    // Add the necessary logic here to close the overlay
+    // ...
+  };
+  
+  return ( // Return the EditKartDialog component
+    <EditKartDialog
+      kart={originalKart}
+      onSave={handleSave}
+      onClose={handleClose}
+    />
+  );
+}; // End of editKart
 
     
 
-    // Add items to a kart. 
+    // Add component to a kart. 
 
 
     // Function will be passed to the KartItems component and create a new item in the kart.
@@ -261,6 +257,10 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
         const updatedKarts = [...karts]; // Create a copy of the karts array
         updatedKarts[kartIndex].components.push(newComponent); 
 
+        // Update the last updated date
+        const updatedKart = updatedKarts[kartIndex];
+        updatedKart.updated = new Date();
+        updatedKarts[kartIndex] = updatedKart;
         setKarts(updatedKarts); // Update the karts state with the updated array
     }
 
@@ -272,7 +272,7 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
 
 <div className="container mx-auto px-4 py-4 border text-center">
   <h1 className="text-2xl font-bold mb-1">Your Karts</h1>
-  <p className="text-lg">You have {karts.length} karts.</p>
+  <p className="text-lg">You have {karts.length} products.</p>
   </div>
   {karts.map((kart) => (
     <div key={kart.id}>
@@ -286,8 +286,17 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
               Description: {kart.description}
             </p>
             <p className="text-lg text-gray-600 mb-5 max-w-xs">
+              <Inventory/> 
               Stock: {kart.item_count === 0 ? (<span className="text-red-500 font-bold animate-pulse">Out of Stock</span>) : (<span className="text-green-500">{kart.item_count}</span>)}
+              <br></br>
+              <ShoppingBasketRounded/>
+              Components: {kart.components.length}
+              <br></br>
+              <Build/>
+              Buildable: {kart.buildable === true ? (<span className="text-green-500">Yes</span>) : (<span className="text-red-500">No</span>)}
+              
             </p>
+
             <p className="text-xs text-gray-600 mb-0 max-w-xs">
               <b>Created:</b> {kart.date.toLocaleDateString()}
             </p>
@@ -323,35 +332,34 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
 
 
         
-        <div className="">
-                <h1>Create a new Kart</h1>
-                <form onSubmit={handelFormSubmit}>
-                    <label htmlFor="name">Kart Name</label>
-                    <input 
-                    className='border border-gray-300 rounded-md px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 w-full'
-                    type="text"
-                    id="name"
-                    value={newKart.name}
-                    placeholder='Enter Kart Name'
-                    onChange={(e) => setNewKart(e.target.value)}
-                    />
+<div className="">
+  <h1>Create a new Kart</h1>
+  <form onSubmit={handelSubmit}>
+    <label htmlFor="name">Kart Name</label>
+    <input 
+      className='border border-gray-300 rounded-md px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 w-full'
+      type="text"
+      id="name"
+      value={name}
+      placeholder='Enter Kart Name'
+      onChange={(e) => setName(e.target.value) }
+    />
 
-
-                    <label htmlFor="description">Description</label>
-                    <input 
-                    className='border border-gray-300 rounded-md px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 w-full' 
-                    type="text"
-                    id="description"
-                    value={newKart.description}
-                    placeholder='Describe your kart'
-                    onChange={(e) => setNewDescription(e.target.value)}
-                    />
+    <label htmlFor="description">Description</label>
+    <input 
+      className='border border-gray-300 rounded-md px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 w-full' 
+      type="text"
+      id="description"
+      value={description}
+      placeholder='Describe your kart'
+      onChange={(e) => setDescription(e.target.value) }
+    />
                     
-                    <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" type="submit">
-                        Create Kart
-                    </Button>
-                </form>
-            </div> 
+    <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" type="submit">
+      Create Kart
+    </Button>
+  </form>
+</div>
         </>
     ); 
 }; // End of KartLists
