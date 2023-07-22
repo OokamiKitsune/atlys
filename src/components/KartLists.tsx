@@ -1,5 +1,6 @@
 // This component is the main component for the index page. It will show individual shopping lists.
 import React, { useState, useEffect } from 'react';
+import {Kart, Component} from './sharedTypes';
 import EditKartDialog from './EditKartDialog';
 import { useRouter } from 'next/router';
 import 'tailwindcss/tailwind.css';
@@ -8,37 +9,6 @@ import { Hash } from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 import { Button, TextField, Dialog, DialogActions, DialogTitle, DialogContent } from '@mui/material';
 import ItemList from './ItemList';
-
-
-// The data sctructure for a kart
-interface Kart {
-  id: string;
-  name: string;
-  description: string;
-  date: Date;
-  updated: Date;
-  status: string;
-  version: number;
-  item_count: number;
-  serial_number: string;
-  buildable: boolean;
-  cost_estimate: number;
-  images: string;
-  components: Component[];
-
-}
-
-interface Component {
-  id: string;
-  name: string;
-  description: string;
-  required: boolean;
-  status: string;
-  cost: number;
-  item_count: number;
-  part_number: string;
-  images: string;
-}
 
 
 const KartLists: React.FC = () => { // FC = Functional Component. This is a React component that is a function.    
