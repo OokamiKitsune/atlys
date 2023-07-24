@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import {Kart, Component} from './sharedTypes';
 import EditKartDialog from './EditKartDialog';
+import AddComponentDialog from './AddComponentDialog';
 import { useRouter } from 'next/router';
 import 'tailwindcss/tailwind.css';
 import { DeleteForever, SmartButton, Edit, ShoppingBag, UsbOffRounded, Inventory, Build, ShoppingBasketRounded } from '@mui/icons-material';
@@ -197,42 +198,93 @@ const editKart = (id: string, name: string, description: string) => {
 
     
 
-    // Add component to a kart. 
+ // Add component to a kart.
+// Function will be passed to the KartItems component and create a new item in the kart.
+const [isDialogOpen, setIsDialogOpen] = useState(false);
+const [newComponent, setNewComponent] = useState<Component>({
+  id: '',
+  name: '',
+  description: '',
+  item_count: 0,
+  cost: 0,
+  images: '',
+  part_number: '',
+  status: '',
+  required: false,
+});
+const [newComponentDescription, setNewComponentDescription] = useState<string>('');
 
+// Function to open the dialog
+const openDialog = () => {
+  setIsDialogOpen(true);
+};
 
-    // Function will be passed to the KartItems component and create a new item in the kart.
-    const addItems = (id: string, name: string, description: string, item_count: number) => {
-        // Find the kart with the matching id
-        const kartIndex = karts.findIndex((karts) => karts.id === id); 
+// Function to close the dialog and reset values
+const closeDialog = () => {
+  setIsDialogOpen(false);
+  setNewComponent({
+    id: '',
+    name: '',
+    description: '',
+    item_count: 0,
+    cost: 0,
+    images: '',
+    part_number: '',
+    status: '',
+    required: false,
+  });
+  setNewComponentDescription('');
+};
 
-        if (kartIndex === -1){
-            alert('Error: Kart not found.');
-            return;
-        }
+const addItems = (id: string, name: string, description: string, item_count: number) => {
+  // Find the kart with the matching id
+  const kartIndex = karts.findIndex((karts) => karts.id === id);
 
-        const newItemName = prompt('Enter the name of the item you want to add to the ' + name + ' kart.');
-        const newItemDescription = prompt('Enter a description for the ' + newItemName + ' item.');
+  if (kartIndex === -1) {
+    alert('Error: Kart not found.');
+    return;
+  }
 
+  // Open the dialog
+  openDialog();
+};
 
-        // Create new item object
-        const newComponent = {
-            id: uuidv4(),
-            name: newItemName,
-            description: newItemDescription,
-            item_count: 0,
+// Save component
+const saveComponent = () => {
+  // Validate the input
+  if (!newComponent.name || !newComponentDescription) {
+    alert('Error: Component name and description cannot be empty.');
+    return;
+  }
 
+  // Create a new component object
+  const newComponentObject: Component = {
+    ...newComponent,
+    id: uuidv4(),
+    description: newComponentDescription,
+  };
 
-        };
+  // Close the dialog
+  closeDialog();
 
-        const updatedKarts = [...karts]; // Create a copy of the karts array
-        updatedKarts[kartIndex].components.push(newComponent); 
+  // Find the kart with the matching id
+  const kartIndex = karts.findIndex((karts) => karts.id === id);
 
-        // Update the last updated date
-        const updatedKart = updatedKarts[kartIndex];
-        updatedKart.updated = new Date();
-        updatedKarts[kartIndex] = updatedKart;
-        setKarts(updatedKarts); // Update the karts state with the updated array
-    }
+  if (kartIndex === -1) {
+    alert('Error: Kart not found.');
+    return;
+  }
+
+  // Create a copy of the karts array
+  const updatedKarts = [...karts];
+  updatedKarts[kartIndex].components.push(newComponentObject);
+
+  // Update the last updated date
+  const updatedKart = updatedKarts[kartIndex];
+  updatedKart.updated = new Date();
+  updatedKarts[kartIndex] = updatedKart;
+  setKarts(updatedKarts); // Update the karts state with the updated array
+};
 
 
     
@@ -282,7 +334,11 @@ const editKart = (id: string, name: string, description: string) => {
             onClick={() => addItems(kart.id, kart.name, kart.description, kart.item_count)}>
             <ShoppingBag /> Add Component
             </Button>
-            
+            <AddComponentDialog
+              isOpen={isDialogOpen}
+              onClose={closeDialog}
+              onSave={saveComponent}
+            />
           <Button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded max-w-xs mb-1"
             onClick={() => editKart(kart.id, kart.name, kart.description)}
