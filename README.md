@@ -1,1 +1,1 @@
-A smart shopping list app. 
+Inventory application
