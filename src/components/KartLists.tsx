@@ -338,6 +338,7 @@ const saveComponent = () => {
               isOpen={isDialogOpen}
               onClose={closeDialog}
               onSave={saveComponent}
+              kartName={kart.name}
             />
           <Button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded max-w-xs mb-1"

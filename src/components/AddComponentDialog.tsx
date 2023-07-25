@@ -1,41 +1,73 @@
 import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Alert } from '@mui/material';
 import KartLists from './KartLists';
-import kart from './KartLists'
+import { Fullscreen } from '@mui/icons-material';
 
 interface AddComponentDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (name: string, description: string) => void;
+  kartName: string;
 }
 
-const AddComponentDialog: React.FC<AddComponentDialogProps> = ({ isOpen, onClose, onSave }) => {
+const AddComponentDialog: React.FC<AddComponentDialogProps> = ({ isOpen, onClose, onSave, kartName }) => {
   const [newComponentDescription, setNewComponentDescription] = useState<string>('');
   const [newComponentName, setNewComponentName] = useState<string>('');
+  const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
+  const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
+  const [hasTriedToSave, setHasTriedToSave] = useState<boolean>(false);
 
   const closeDialog = () => {
+    if (newComponentName || newComponentDescription) {
+        const confirmCancel = window.confirm('Unsaved data was entered. Are you sure you want to cancel?');
+        if (!confirmCancel)
+            return;
+    }
     setNewComponentName('');
     setNewComponentDescription('');
     onClose();
+    setShowErrorMessage(false);
+    setShowSuccessMessage(false);
+    setHasTriedToSave(false);
   };
 
   const saveComponent = () => {
     // Validate the input
     if (!newComponentName || !newComponentDescription) {
-      alert('Error: Component name and description cannot be empty.');
+        setHasTriedToSave(true);
+  
+      // Clear the error message after 2 seconds
+      setTimeout(() => {
+        setShowErrorMessage(false);
+      }, 2000);
+  
       return;
     }
-
+  
     // Call the onSave function with the new component
     onSave(newComponentName, newComponentDescription);
-
-    // Close the dialog
-    closeDialog();
+  
+    // Show the success message
+    setShowSuccessMessage(true);
+  
+    // Close the dialog after 2 seconds
+    setTimeout(() => {
+      closeDialog();
+    }, 2000);
   };
+  
 
   return (
     <Dialog open={isOpen} onClose={closeDialog}>
-      <DialogTitle>Add Component to {kart.name}</DialogTitle>
+        <Alert severity="success" onClose={() => setShowSuccessMessage(false)}>
+        Component added successfully!
+        </Alert>
+        {hasTriedToSave && !newComponentName && !newComponentDescription && (
+        <Alert severity="error" onClose={() => setShowErrorMessage(false)}>
+        Error: Component name and description cannot be empty.
+        </Alert>
+        )}
+      <DialogTitle>Adding Component to <b>{kartName}</b></DialogTitle>
       <div className="text-xs flex justify-center">
       <p>Components are items or "pieces" that make up the sum of a product.</p>
       </div>
