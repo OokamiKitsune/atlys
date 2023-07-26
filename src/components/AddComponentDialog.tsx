@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Alert } from '@mui/material';
-import KartLists from './KartLists';
-import { Fullscreen } from '@mui/icons-material';
+
 
 interface AddComponentDialogProps {
   isOpen: boolean;
