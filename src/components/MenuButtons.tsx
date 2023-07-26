@@ -44,7 +44,7 @@ function ResponsiveAppBar() {
         const pagePath = page.toLowerCase().replace(/\s+/g, '-');
         router.push(`/${pagePath}`);
         handleCloseNavMenu();
-        };
+        }; 
 
     const handleSettingsClick = (setting: string) => {
         const settingPath = setting.toLowerCase().replace(/\s+/g, '-');
