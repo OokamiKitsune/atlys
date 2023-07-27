@@ -5,11 +5,12 @@ import EditKartDialog from './EditKartDialog';
 import AddComponentDialog from './AddComponentDialog';
 import { useRouter } from 'next/router';
 import 'tailwindcss/tailwind.css';
-import { DeleteForever, SmartButton, Edit, ShoppingBag, UsbOffRounded, Inventory, Build, ShoppingBasketRounded } from '@mui/icons-material';
+import { DeleteForever, SmartButton, Edit, ShoppingBag, UsbOffRounded, Inventory, Build, ShoppingBasketRounded, Add, Delete, Email, LocationOn, Phone } from '@mui/icons-material';
 import { Hash } from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
-import { Button, TextField, Dialog, DialogActions, DialogTitle, DialogContent } from '@mui/material';
+import { Button, TextField, Dialog, DialogActions, DialogTitle, DialogContent, Box, Card, IconButton, Stack, Typography } from '@mui/material';
 import ItemList from './ItemList';
+import { grey } from '@mui/material/colors';
 
 
 const KartLists: React.FC = () => { // FC = Functional Component. This is a React component that is a function.    
@@ -383,10 +384,51 @@ const saveComponent = () => {
     />
                     
     <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" type="submit">
-      Create Kart
+      Create Product
     </Button>
   </form>
 </div>
+<Card>
+            <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <IconButton>
+                <Add sx={{ fontSize: 100  }} /> Add Vendor
+            </IconButton>
+            </Box>
+            <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                
+
+                <Stack spacing={0.5}>
+                    <Typography fontWeight={700} fontSize={25}>
+                    
+                    Amazon Inc.
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                    <LocationOn sx={{color: grey[500]}} />
+                    
+            
+                    Scranton, PA 
+                    <br></br>
+                    <Phone sx={{color: grey[500]}} /> 
+                    
+                    800-555-0123
+                    <br></br>
+                    <Email sx={{color: grey[500]}} />
+                    
+                    jeff.bezos@amazon.com
+                    </Typography>
+                </Stack>
+                <Box alignContent={'flex-end'} sx={{ p: 2, display: 'flex' }}>
+                    <IconButton>
+                        <Edit sx={{ fontSize: 25  }} />
+                    </IconButton>
+                    <IconButton>
+                    <Delete sx={{ fontSize: 25  }} />
+                    </IconButton>
+            </Box>
+
+            </Box>
+
+        </Card>
         </>
     ); 
 }; // End of KartLists

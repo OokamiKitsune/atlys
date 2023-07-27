@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import 'tailwindcss/tailwind.css';
 import Layout from '@/components/Layout';
 import Chart from 'chart.js/auto';
+import ContactCard from '@/components/ContactCard';
 
 const IndexPage: React.FC = () => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
@@ -36,9 +37,11 @@ const IndexPage: React.FC = () => {
       {/* Your page content goes here */}
       <div className="container mx-auto px-4 py-4 border text-4xl">
         <h1>Dashboard</h1>
+        
         <canvas ref={chartRef} />
       </div>
     </Layout>
+    
   );
 };
 
