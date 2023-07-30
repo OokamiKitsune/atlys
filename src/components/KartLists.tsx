@@ -13,8 +13,9 @@ import ItemList from './ItemList';
 import { grey } from '@mui/material/colors';
 
 
+// !!!Kart is being renamed to Product!!!
 const KartLists: React.FC = () => { // FC = Functional Component. This is a React component that is a function.    
-    const [karts, setKarts] = useState<Product[]>([]); // Initialize the state with an empty array. Within this array will be a list of Kart objects.
+    const [karts, setKarts] = useState<Product[]>([]); // Initialize the state with an empty array. Within this array will be a list of Product objects.
     const [description, setDescription] = useState<string>('');
     const [name, setName] = useState<string>('');
 
@@ -220,6 +221,7 @@ const [newComponent, setNewComponent] = useState<Component>({
   bin_location: '',
   sku: '',
   vendor: [],
+  tracking_number: '',
 
 });
 const [newComponentDescription, setNewComponentDescription] = useState<string>('');
@@ -246,6 +248,7 @@ const closeDialog = () => {
     bin_location: '',
     sku: '',
     vendor: [],
+    tracking_number: '',
   });
   setNewComponentDescription('');
 };
@@ -404,7 +407,7 @@ const saveComponent = () => {
 <Card>
             <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <IconButton>
-                <Add sx={{ fontSize: 100  }} /> Add Vendor
+                <Add sx={{ fontSize: 100  }} /> Add Product
             </IconButton>
             </Box>
             <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
