@@ -1,18 +1,20 @@
-// The data sctructure for a kart
+// The data sctructures used in the application
 
-interface Kart {
+interface Product {
     id: string;
     name: string;
     description: string;
-    date: Date;
+    created: Date;
     updated: Date;
     status: string;
     version: number;
     item_count: number;
     serial_number: string;
+    sku: string;
+    bin_location: string;
     buildable: boolean;
     cost_estimate: number;
-    images: string;
+    images: string[];
     components: Component[];  
 }
   
@@ -25,7 +27,35 @@ interface Kart {
     cost: number;
     item_count: number;
     part_number: string;
-    images: string;
+    serial_number: string;
+    sku: string;
+    bin_location: string;
+    images: string[];
+    vendor: Vendor[];
 }
-  
-  export type { Kart, Component };
+  interface Vendor {
+    id: string;
+    name: string;
+    description: string;
+    components: Component[];
+    industry: string;
+    relationship: number;
+    dependency_rating: number;
+    address: string;
+    phone: string;
+    email: string;
+    contact: Contact[];
+    website: string[];
+  }
+
+interface Contact {
+    id: string;
+    first_name: string;
+    last_name: string;
+    email: string[];
+    phone: string[];
+    images: string;
+    pronouns: string;
+    vendor: Vendor;
+}
+  export type { Product, Component };

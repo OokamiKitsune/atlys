@@ -1,6 +1,6 @@
 // This component is the main component for the index page. It will show individual shopping lists.
 import React, { useState, useEffect } from 'react';
-import {Kart, Component} from './sharedTypes';
+import {Product, Component} from './sharedTypes';
 import EditKartDialog from './EditKartDialog';
 import AddComponentDialog from './AddComponentDialog';
 import { useRouter } from 'next/router';
@@ -14,7 +14,7 @@ import { grey } from '@mui/material/colors';
 
 
 const KartLists: React.FC = () => { // FC = Functional Component. This is a React component that is a function.    
-    const [karts, setKarts] = useState<Kart[]>([]); // Initialize the state with an empty array. Within this array will be a list of Kart objects.
+    const [karts, setKarts] = useState<Product[]>([]); // Initialize the state with an empty array. Within this array will be a list of Kart objects.
     const [description, setDescription] = useState<string>('');
     const [name, setName] = useState<string>('');
 
@@ -23,10 +23,10 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
       const storedKarts = localStorage.getItem('karts');
       console.log(storedKarts);
       if (storedKarts) {
-        const parsedKarts: Kart[] = JSON.parse(storedKarts);
+        const parsedKarts: Product[] = JSON.parse(storedKarts);
         const kartsWithDateFixes = parsedKarts.map((kart) => ({
           ...kart,
-          date: new Date(kart.date), // Convert the date string to a date object
+          date: new Date(kart.created), // Convert the date string to a date object
           updated: new Date(kart.updated), // Convert the date string to a date object
         }));
         setKarts(kartsWithDateFixes);
@@ -34,11 +34,11 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
     },[]);
 
     
-    const [newKart, setNewKart] = useState<Kart>({ // 
+    const [newKart, setNewKart] = useState<Product>({ // 
         id: '',
         name: '',
         description: '',
-        date: new Date(),
+        created: new Date(),
         updated: new Date(),
         status: '',
         version: 0,
@@ -46,8 +46,10 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
         serial_number: '',
         buildable: false,
         cost_estimate: 0,
-        images: '',
+        images: [],
         components: [],
+        bin_location: '',
+        sku: '',
       
     }); 
     
@@ -73,20 +75,22 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
         return;
       }
     
-      const newKart: Kart = {
+      const newKart: Product = {
         id: uuidv4(),
         name: name,
         description: description,
-        date: new Date(),
+        created: new Date(),
         updated: new Date(),
-        status: 'NYI',
+        status: '',
         item_count: 0,
         serial_number: '',
         cost_estimate: 0,
-        images: '',
+        images: [],
         buildable: false,
         version: 0,
         components: [],
+        sku: '',
+        bin_location: ''
       };
     
       setName(''); // Reset the name state to an empty string
@@ -116,7 +120,7 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
     // EditKartDialog component
     
     const EditKartDialog: React.FC<{
-      kart: Kart;
+      kart: Product;
       onSave: (name: string, description: string) => void;
       onClose: () => void;
     }> = ({ kart, onSave, onClose }) => {
@@ -208,10 +212,15 @@ const [newComponent, setNewComponent] = useState<Component>({
   description: '',
   item_count: 0,
   cost: 0,
-  images: '',
+  images: [],
   part_number: '',
+  serial_number: '',
   status: '',
   required: false,
+  bin_location: '',
+  sku: '',
+  vendor: [],
+
 });
 const [newComponentDescription, setNewComponentDescription] = useState<string>('');
 
@@ -229,10 +238,14 @@ const closeDialog = () => {
     description: '',
     item_count: 0,
     cost: 0,
-    images: '',
+    images: [],
     part_number: '',
     status: '',
     required: false,
+    serial_number: '',
+    bin_location: '',
+    sku: '',
+    vendor: [],
   });
   setNewComponentDescription('');
 };
@@ -321,7 +334,7 @@ const saveComponent = () => {
             </p>
 
             <p className="text-xs text-gray-600 mb-0 max-w-xs">
-              <b>Created:</b> {kart.date.toLocaleDateString()}
+              <b>Created:</b> {kart.created.toLocaleDateString()}
             </p>
             <p className="text-xs text-gray-600 mb-0 max-w-xs">
               <b>Last Updated:</b> {kart.updated.toISOString().slice()} UTC</p>
