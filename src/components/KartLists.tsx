@@ -15,27 +15,27 @@ import { grey } from '@mui/material/colors';
 
 // !!!Kart is being renamed to Product!!!
 const KartLists: React.FC = () => { // FC = Functional Component. This is a React component that is a function.    
-    const [karts, setKarts] = useState<Product[]>([]); // Initialize the state with an empty array. Within this array will be a list of Product objects.
+    const [products, setProducts] = useState<Product[]>([]); // Initialize the state with an empty array. Within this array will be a list of Product objects.
     const [description, setDescription] = useState<string>('');
     const [name, setName] = useState<string>('');
 
     // Load the kart list from local storage
     useEffect(() => {
-      const storedKarts = localStorage.getItem('karts');
-      console.log(storedKarts);
-      if (storedKarts) {
-        const parsedKarts: Product[] = JSON.parse(storedKarts);
-        const kartsWithDateFixes = parsedKarts.map((kart) => ({
-          ...kart,
-          date: new Date(kart.created), // Convert the date string to a date object
-          updated: new Date(kart.updated), // Convert the date string to a date object
+      const storedProducts = localStorage.getItem('karts');
+      console.log(storedProducts);
+      if (storedProducts) {
+        const parsedProducts: Product[] = JSON.parse(storedProducts);
+        const productsWithDateFixes = parsedProducts.map((product) => ({
+          ...product,
+          date: new Date(product.created), // Convert the date string to a date object
+          updated: new Date(product.updated), // Convert the date string to a date object
         }));
-        setKarts(kartsWithDateFixes);
+        setProducts(productsWithDateFixes);
       }
     },[]);
 
     
-    const [newKart, setNewKart] = useState<Product>({ // 
+    const [newProduct, setNewProduct] = useState<Product>({ // 
         id: '',
         name: '',
         description: '',
@@ -57,26 +57,26 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
 
         // Store kart properties in local storage
         useEffect(() => {
-          localStorage.setItem('karts', JSON.stringify(karts))
+          localStorage.setItem('products', JSON.stringify(products))
     
           return () => {
-            localStorage.removeItem('karts')
+            localStorage.removeItem('products')
           }
-        }, [karts]);
+        }, [products]);
 
     const handelSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault(); // 
     
       if (name.trim() === '') {
-        alert('Error: Kart name cannot be empty.');
+        alert('Error: Product name cannot be empty.');
         return;
       }
       if (description.trim() === '') {
-        alert('Error: Kart description cannot be empty.');
+        alert('Error: Product description cannot be empty.');
         return;
       }
     
-      const newKart: Product = {
+      const newProduct: Product = {
         id: uuidv4(),
         name: name,
         description: description,
@@ -96,22 +96,22 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
     
       setName(''); // Reset the name state to an empty string
       setDescription(''); // Reset the description state to an empty string
-      setKarts([...karts, newKart]);
+      setProducts([...products, newProduct]);
       
     };
     
-    // Delete a kart
-    const deleteKart = (id: string, name: string) => {
-        const kartName = name;
-        const confirmDelete = confirm('Are you sure you want to delete the ' + kartName + ' kart and all of its items?');
+    // Delete a product
+    const deleteProduct = (id: string, name: string) => {
+        const productName = name;
+        const confirmDelete = confirm('Are you sure you want to delete ' + productName + ' and all of its items?');
         // Filter out the kart with the matching id
-        const filteredKarts = karts.filter((karts) => karts.id !== id); 
+        const filteredProducts = products.filter((products) => products.id !== id); 
         // Update the kart list
         if (confirmDelete === true) {
-            setKarts(filteredKarts); // Update the kart list
+            setProducts(filteredProducts); // Update the product list
 
         };
-    }; // End of deleteKart
+    }; // End of deleteProduct
 
 
 
@@ -121,12 +121,12 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
     // EditKartDialog component
     
     const EditKartDialog: React.FC<{
-      kart: Product;
+      product: Product;
       onSave: (name: string, description: string) => void;
       onClose: () => void;
-    }> = ({ kart, onSave, onClose }) => {
-      const [editedName, setEditedName] = useState(kart.name);
-      const [editedDescription, setEditedDescription] = useState(kart.description);
+    }> = ({ product: product, onSave, onClose }) => {
+      const [editedName, setEditedName] = useState(product.name);
+      const [editedDescription, setEditedDescription] = useState(product.description);
     
       const saveChanges = () => {
         // Perform the necessary actions to save changes
@@ -135,10 +135,10 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
     
       return (
         <Dialog open={true} onClose={onClose}>
-          <DialogTitle>Edit Kart</DialogTitle>
+          <DialogTitle>Edit Product</DialogTitle>
           <DialogContent>
             <TextField
-              label="Kart Name"
+              label="Product Name"
               value={editedName}
               onChange={(e) => setEditedName(e.target.value)}
             />
@@ -162,27 +162,27 @@ const KartLists: React.FC = () => { // FC = Functional Component. This is a Reac
 
 
 // Edit a kart
-const editKart = (id: string, name: string, description: string) => {
-  const kartIndex = karts.findIndex((kart) => kart.id === id);
+const editProduct = (id: string, name: string, description: string) => {
+  const productIndex = products.findIndex((product) => product.id === id);
 
-  if (kartIndex === -1) {
-    alert('Error: Kart not found.');
+  if (productIndex === -1) {
+    alert('Error: Product was not found.');
     return;
   }
 
-  const originalKart = karts[kartIndex];
+  const originalProduct = products[productIndex];
 
   const handleSave = (editedName: string, editedDescription: string) => {
     // Update the kart object with the edited values
-    originalKart.name = editedName;
-    originalKart.description = editedDescription;
+    originalProduct.name = editedName;
+    originalProduct.description = editedDescription;
 
     // Create a new array with updated kart
-    const updatedKarts = [...karts];
-    updatedKarts[kartIndex] = originalKart;
+    const updatedProducts = [...products];
+    updatedProducts[productIndex] = originalProduct;
 
     // Update the karts state with the updated array
-    setKarts(updatedKarts);
+    setProducts(updatedProducts);
 
     // Close the modal or form overlay
     handleClose(); // Make sure to define handleClose outside of editKart
@@ -195,7 +195,7 @@ const editKart = (id: string, name: string, description: string) => {
   
   return ( // Return the EditKartDialog component
     <EditKartDialog
-      kart={originalKart}
+      product={originalProduct}
       onSave={handleSave}
       onClose={handleClose}
     />
@@ -204,8 +204,8 @@ const editKart = (id: string, name: string, description: string) => {
 
     
 
- // Add component to a kart.
-// Function will be passed to the KartItems component and create a new item in the kart.
+ // Add component to a product.
+// Function will be passed to the ProductItems component and create a new item in the kart.
 const [isDialogOpen, setIsDialogOpen] = useState(false);
 const [newComponent, setNewComponent] = useState<Component>({
   id: '',
@@ -255,10 +255,10 @@ const closeDialog = () => {
 
 const addItems = (id: string, name: string, description: string, item_count: number) => {
   // Find the kart with the matching id
-  const kartIndex = karts.findIndex((karts) => karts.id === id);
+  const productIndex = products.findIndex((karts) => karts.id === id);
 
-  if (kartIndex === -1) {
-    alert('Error: Kart not found.');
+  if (productIndex === -1) {
+    alert('Error: Product was not found.');
     return;
   }
 
@@ -284,23 +284,24 @@ const saveComponent = () => {
   // Close the dialog
   closeDialog();
 
-  // Find the kart with the matching id
-  const kartIndex = karts.findIndex((karts) => karts.id === id);
+  // Find the product with the matching id
+  const id = newComponentObject.id;
+  const productIndex = products.findIndex((products) => products.id === id);
 
-  if (kartIndex === -1) {
-    alert('Error: Kart not found.');
+  if (productIndex === -1) {
+    alert('Error: Product was not found.');
     return;
   }
 
   // Create a copy of the karts array
-  const updatedKarts = [...karts];
-  updatedKarts[kartIndex].components.push(newComponentObject);
+  const updatedProducts = [...products];
+  updatedProducts[productIndex].components.push(newComponentObject);
 
   // Update the last updated date
-  const updatedKart = updatedKarts[kartIndex];
-  updatedKart.updated = new Date();
-  updatedKarts[kartIndex] = updatedKart;
-  setKarts(updatedKarts); // Update the karts state with the updated array
+  const updatedProduct = updatedProducts[productIndex];
+  updatedProduct.updated = new Date();
+  updatedProducts[productIndex] = updatedProduct;
+  setProducts(updatedProducts); // Update the karts state with the updated array
 };
 
 
@@ -311,61 +312,61 @@ const saveComponent = () => {
 
 <div className="container mx-auto px-4 py-4 border text-center">
   <h1 className="text-2xl font-bold mb-1">Products</h1>
-  <p className="text-lg">You have {karts.length} products.</p>
+  <p className="text-lg">You have {products.length} products.</p>
   </div>
-  {karts.map((kart) => (
-    <div key={kart.id}>
+  {products.map((product) => (
+    <div key={product.id}>
       <div className="container mx-auto px-4 py-4 border flex items-center justify-between my-4">
         <div className="flex flex-col">
           <h2 className="text-3xl text-purple-500 max-w-xs font-medium">
-            {kart.name}
+            {product.name}
           </h2>
           <div className="flex flex-col items-start">
             <p className="text-lg text-gray-600 mb-5 max-w-xs overflow-hidden overflow-ellipsis">
-              Description: {kart.description}
+              Description: {product.description}
             </p>
             <p className="text-lg text-gray-600 mb-5 max-w-xs">
               <Inventory/> 
-              Stock: {kart.item_count === 0 ? (<span className="text-red-500 font-bold animate-pulse">Out of Stock</span>) : (<span className="text-green-500">{kart.item_count}</span>)}
+              Stock: {product.item_count === 0 ? (<span className="text-red-500 font-bold animate-pulse">Out of Stock</span>) : (<span className="text-green-500">{product.item_count}</span>)}
               <br></br>
               <ShoppingBasketRounded/>
-              Components: {kart.components.length}
+              Components: {product.components.length}
               <br></br>
               <Build/>
-              Buildable: {kart.buildable === true ? (<span className="text-green-500">Yes</span>) : (<span className="text-red-500">No</span>)}
+              Buildable: {product.buildable === true ? (<span className="text-green-500">Yes</span>) : (<span className="text-red-500">No</span>)}
               
             </p>
 
             <p className="text-xs text-gray-600 mb-0 max-w-xs">
-              <b>Created:</b> {kart.created.toLocaleDateString()}
+              <b>Created:</b> {product.created.toLocaleDateString()}
             </p>
             <p className="text-xs text-gray-600 mb-0 max-w-xs">
-              <b>Last Updated:</b> {kart.updated.toISOString().slice()} UTC</p>
+              <b>Last Updated:</b> {product.updated.toISOString().slice()} UTC</p>
             <p className="text-xs text-gray-500 mb-0 max-w-xs font-mono">
-              <b>ID:</b> {kart.id}</p>
+              <b>ID:</b> {product.id}</p>
           </div>
         </div>
         <div className="flex flex-col">
             <Button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded max-w-xs mb-1"
-            onClick={() => addItems(kart.id, kart.name, kart.description, kart.item_count)}>
+            onClick={() => addItems(product.id, product.name, product.description, product.item_count)}>
             <ShoppingBag /> Add Component
             </Button>
             <AddComponentDialog
               isOpen={isDialogOpen}
               onClose={closeDialog}
               onSave={saveComponent}
-              kartName={kart.name}
+              productName={product.name}
             />
           <Button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded max-w-xs mb-1"
-            onClick={() => editKart(kart.id, kart.name, kart.description)}
+            onClick={() => editProduct(product.id, product.name, product.description)}
           >
-            <Edit /> Edit Kart
+            <Edit /> Edit Product
           </Button>
           <Button
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded max-w-xs"
-            onClick={() => deleteKart(kart.id, kart.name)}
+            onClick={() => deleteProduct(product.id, product.name)}
           >
             <DeleteForever /> Delete
           </Button>
@@ -377,15 +378,15 @@ const saveComponent = () => {
 
         
 <div className="">
-  <h1>Create a new Kart</h1>
+  <h1>Create a new Product</h1>
   <form onSubmit={handelSubmit}>
-    <label htmlFor="name">Kart Name</label>
+    <label htmlFor="name">Product Name</label>
     <input 
       className='border border-gray-300 rounded-md px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 w-full'
       type="text"
       id="name"
       value={name}
-      placeholder='Enter Kart Name'
+      placeholder='Enter product name'
       onChange={(e) => setName(e.target.value) }
     />
 
@@ -395,7 +396,7 @@ const saveComponent = () => {
       type="text"
       id="description"
       value={description}
-      placeholder='Describe your kart'
+      placeholder='Describe your product'
       onChange={(e) => setDescription(e.target.value) }
     />
                     
