@@ -26,12 +26,13 @@ interface Product {
     required: boolean;
     status: string;
     cost: number;
-    item_count: number;
-    part_number: string;
-    serial_number: string;
-    sku: string;
-    bin_location: string;
-    tracking_number: string;
+    quantity: number;
+    part_number: string | null;
+    serial_number: string | null;
+    sku: string | null;
+    upc: number | null;
+    bin_location: string | null;
+    tracking_number: string | null;
     images: string[];
     vendor: Vendor[];
 }
@@ -67,6 +68,16 @@ interface Contact {
     vendor: Vendor;
 }
 
+// Purchase order information
+interface PurchaseOrder {
+    id: string;
+    name: string;
+    description: string;
+    created: Date;
+    updated: Date;
+    status: string;
+}
+
 // Users of the application
 interface User {
     id: string;
@@ -94,4 +105,4 @@ interface Permission {
     name: string;
     description: string;
 }
-  export type { Product, Component, Vendor, Contact };
+  export type { Product, Component, Vendor, Contact, User, Role, Permission, PurchaseOrder };

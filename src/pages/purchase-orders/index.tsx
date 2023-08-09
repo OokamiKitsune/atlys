@@ -5,7 +5,7 @@ import KartLists from '@/components/KartLists';
 import Layout from '@/components/Layout';
 
 // Import any other components or modules you need
-const IndexPage: React.FC = () => {
+const PurchaseOrders: React.FC = () => {
     return (
         <Layout>
           {/* Your page content goes here */}
@@ -16,5 +16,5 @@ const IndexPage: React.FC = () => {
       );
     };
   
-  export default IndexPage;
+  export default PurchaseOrders;
   

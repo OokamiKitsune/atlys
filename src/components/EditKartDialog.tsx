@@ -1,17 +1,17 @@
 // EditKartDialog.tsx
 import React, { useState } from 'react';
-import {Kart} from './sharedTypes';
+import {Product} from './sharedTypes';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 
 interface EditKartDialogProps {
-  kart: Kart;
+  product: Product;
   onSave: (editedName: string, editedDescription: string) => void;
   onClose: () => void;
 }
 
-const EditKartDialog: React.FC<EditKartDialogProps> = ({ kart, onSave, onClose }) => {
-  const [editedName, setEditedName] = useState(kart.name);
-  const [editedDescription, setEditedDescription] = useState(kart.description);
+const EditKartDialog: React.FC<EditKartDialogProps> = ({ product, onSave, onClose }) => {
+  const [editedName, setEditedName] = useState(product.name);
+  const [editedDescription, setEditedDescription] = useState(product.description);
 
   const saveChanges = () => {
     // Perform the necessary actions to save changes

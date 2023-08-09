@@ -3,9 +3,9 @@ import Layout from '@/components/Layout';
 import { useRouter } from 'next/router';
 
 
-const SingleProductPage: React.FC = () => {
+const ProductItemPage: React.FC = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { productId } = router.query;
 
   // Add code to fetch and display the product with the given id here
   return (
@@ -14,7 +14,7 @@ const SingleProductPage: React.FC = () => {
           {/* Your page content goes here */}
           <div className="container mx-auto px-4 py-4 border">
           <h1>Product Details</h1>
-      <p>Product ID: {id}</p>
+      <p>Product ID: {productId}</p>
       <p>Product Name: {}</p>
       {/* Display product details */}
           </div>
@@ -22,4 +22,4 @@ const SingleProductPage: React.FC = () => {
   );
 };
 
-export default SingleProductPage;
+export default ProductItemPage;

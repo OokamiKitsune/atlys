@@ -211,7 +211,7 @@ const [newComponent, setNewComponent] = useState<Component>({
   id: '',
   name: '',
   description: '',
-  item_count: 0,
+  quantity: 0,
   cost: 0,
   images: [],
   part_number: '',
@@ -220,6 +220,7 @@ const [newComponent, setNewComponent] = useState<Component>({
   required: false,
   bin_location: '',
   sku: '',
+  upc: 0,
   vendor: [],
   tracking_number: '',
 
@@ -238,7 +239,7 @@ const closeDialog = () => {
     id: '',
     name: '',
     description: '',
-    item_count: 0,
+    quantity: 0,
     cost: 0,
     images: [],
     part_number: '',
@@ -247,6 +248,7 @@ const closeDialog = () => {
     serial_number: '',
     bin_location: '',
     sku: '',
+    upc: 0,
     vendor: [],
     tracking_number: '',
   });

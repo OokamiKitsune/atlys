@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Table } from '@mui/material';
 import { Component } from './sharedTypes';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import { Tab } from '@mui/base';
 
 interface AddComponentDialogProps {
   isOpen: boolean;
@@ -17,19 +18,36 @@ const AddComponentDialog: React.FC<AddComponentDialogProps> = ({
   onSave,
   productName,
 }) => {
-  const [selectedComponent, setSelectedComponent] = useState<string>('');
+  const [selectedComponent, setSelectedComponent] = useState<Component | null>(null);
   
   // Sample options data, replace it with your own data
-  const componentList = [
-    { title: 'Component A' },
-    { title: 'Component B' },
-    { title: 'Component C' },
+  const componentList: Component[] = [
+    { 
+      id: '1',
+      name: 'Component 1',
+      description: 'This is the first component',
+      required: true,
+      status: 'Available',
+      quantity: 10,
+      cost: 10,
+      part_number: '123456',
+      serial_number: '123456',
+      sku: '123456',
+      upc: 1111,
+      bin_location: 'A1',
+      tracking_number: '123456',
+      images: [],
+      vendor: [],
+
+
+
+  },
     // ... add more options
   ];
 
   // Close the dialog
   const closeDialog = () => {
-    setSelectedComponent('');
+    setSelectedComponent(null);
     onClose();
   };
 
@@ -44,7 +62,7 @@ const AddComponentDialog: React.FC<AddComponentDialogProps> = ({
     onSave(selectedComponent);
 
     // Reset the form fields after adding the component
-    setSelectedComponent('');
+    setSelectedComponent(null);
   };
 
   return (
@@ -55,12 +73,13 @@ const AddComponentDialog: React.FC<AddComponentDialogProps> = ({
         <br />
         <Autocomplete
           options={componentList}
-          getOptionLabel={(option) => option.title}
+          getOptionLabel={(option) => option.Component}
           value={selectedComponent}
           onChange={(event, newValue) => setSelectedComponent(newValue)}
           renderInput={(params) => <TextField {...params} label="Name" required />}
         />
       </DialogContent>
+      
       <DialogActions>
         <Button onClick={closeDialog} color="secondary">
           Cancel
