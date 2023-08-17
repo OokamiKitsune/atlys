@@ -7,13 +7,15 @@ interface Product {
     created: Date;
     updated: Date;
     status: string;
-    version: number;
+    version: string;
     item_count: number;
     serial_number: string;
     sku: string;
     bin_location: string;
     buildable: boolean;
     cost_estimate: number;
+    retail_price: number;
+    quantity: number;
     images: string[];
     components: Component[];  
 }
