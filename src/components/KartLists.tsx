@@ -8,9 +8,10 @@ import 'tailwindcss/tailwind.css';
 import { DeleteForever, SmartButton, Edit, ShoppingBag, UsbOffRounded, Inventory, Build, ShoppingBasketRounded, Add, Delete, Email, LocationOn, Phone } from '@mui/icons-material';
 import { Hash } from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
-import { Button, TextField, Dialog, DialogActions, DialogTitle, DialogContent, Box, Card, IconButton, Stack, Typography } from '@mui/material';
+import { Button, TextField, Dialog, DialogActions, DialogTitle, DialogContent, Box, Card, IconButton, Stack, Typography, ButtonBaseActions } from '@mui/material';
 import ItemList from './ItemList';
 import { grey } from '@mui/material/colors';
+import AddProductDialog from './AddProductDialog';
 
 
 // !!!Kart is being renamed to Product!!!
@@ -402,9 +403,16 @@ const saveComponent = () => {
       onChange={(e) => setDescription(e.target.value) }
     />
                     
-    <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" type="submit">
-      Create Product
+    <Button 
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded max-w-xs mb-1"
+        onClick={openDialog}>
+        <Add /> New Product
     </Button>
+    <AddProductDialog
+        isOpen={isDialogOpen}
+        onClose={closeDialog}
+        onSave={saveComponent}
+    />  
   </form>
 </div>
 <Card>

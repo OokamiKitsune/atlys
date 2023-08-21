@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Table } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Table, ImageList } from '@mui/material';
 import { Component, Product } from './sharedTypes';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { Tab } from '@mui/base';
+import { Upload } from '@mui/icons-material';
 
 
 type initProduct = { 
@@ -56,7 +57,7 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({
 
     // Add and save the new product
     const addProduct = () => {
-        if (!createdProduct) {
+        if (!createdProduct?.name) {
             alert('Error: Please enter a product to create.');
             return;
         }
@@ -65,7 +66,37 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({
 
         // Reset the form fields after adding the product
         setCreatedProduct(null);
-    }
-}
+    };
+    // Return JSX
+    return (
+        <Dialog open={isOpen} onClose={closeDialog} maxWidth="lg" fullWidth>
+        <DialogTitle>Create a new Product</DialogTitle>
+        <DialogContent>
+          <p></p>
+          <br />
+
+          <ImageList>
+            
+            <Button variant="contained" component="label">
+               <Upload /> Upload Product Image
+                <input type="file" hidden />
+            </Button>
+            </ImageList>
+        </DialogContent>
+
+            
+        
+        <DialogActions>
+          <Button onClick={closeDialog} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={addProduct} color="primary">
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+  );
+};
+
 
 export default AddProductDialog;

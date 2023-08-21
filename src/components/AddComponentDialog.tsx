@@ -67,7 +67,7 @@ const AddComponentDialog: React.FC<AddComponentDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onClose={closeDialog} maxWidth="lg" fullWidth>
-      <DialogTitle>Add Component to <b>{productName}</b></DialogTitle>
+      <DialogTitle>Adding component to: <b>{productName}</b></DialogTitle>
       <DialogContent>
         <p>Search for a component to add. Components shown are what is available in inventory.</p>
         <br />
@@ -76,7 +76,7 @@ const AddComponentDialog: React.FC<AddComponentDialogProps> = ({
           getOptionLabel={(option) => option.Component}
           value={selectedComponent}
           onChange={(event, newValue) => setSelectedComponent(newValue)}
-          renderInput={(params) => <TextField {...params} label="Name" required />}
+          renderInput={(params) => <TextField {...params} label="Select component" required />}
         />
       </DialogContent>
       
