@@ -87,7 +87,12 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({
         <p></p>
         <br />
         <div>
+					<div className="mb-4">
+					<h1><b>Product Details</b></h1>
+					
+					</div>
           <TextField
+						className="mt-4 w-1/2"
             label="Product Name"
             value={createdProduct?.name ?? ""}
             onChange={(e) =>
@@ -101,8 +106,10 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({
         </div>
         <div>
           <TextField
-            className="mt-4"
+            className="mt-4 w-1/2"
             label="Product Description"
+						multiline 
+						rows={4}
             value={createdProduct?.description ?? ""}
             onChange={(e) =>
               setCreatedProduct((prevProduct) => ({
@@ -115,8 +122,9 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({
         </div>
 
         <div>
-          <FormControl className="mt-4">
-            <InputLabel>Set Status</InputLabel>
+          <FormControl className="mt-4 w-1/2">
+					<div className="text-gray-500 font-medium mb-1">Set Status</div>
+
             <Select
               value={createdProduct?.status ?? ""}
               onChange={(e) =>
@@ -135,7 +143,7 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({
 
         <div>
           <TextField
-            className="mt-4"
+            className="mt-4 w-1/2"
             label="Version"
             value={createdProduct?.version ?? ""}
             onChange={(e) =>
