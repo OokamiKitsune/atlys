@@ -110,16 +110,18 @@ const KartLists: React.FC = () => {
       description: description,
       created: new Date(),
       updated: new Date(),
-      status: "",
+      status: "Inactive",
       item_count: 0,
       serial_number: "",
       cost_estimate: 0,
       images: [],
       buildable: false,
-      version: 0,
+      version: "",
       components: [],
       sku: "",
       bin_location: "",
+      retail_price: 0,
+      quantity: 0,
     };
 
     setName(""); // Reset the name state to an empty string
@@ -157,7 +159,9 @@ const KartLists: React.FC = () => {
 
     const saveChanges = () => {
       // Perform the necessary actions to save changes
-      onSave(editedName, editedDescription);
+      if (editedName !== undefined && editedDescription !== undefined) {
+        onSave(editedName, editedDescription);
+      }
     };
 
     return (

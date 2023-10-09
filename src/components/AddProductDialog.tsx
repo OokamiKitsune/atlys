@@ -20,6 +20,8 @@ import TextField from "@mui/material/TextField";
 import { Tab } from "@mui/base";
 import { ArrowDropDown, Label, Upload } from "@mui/icons-material";
 import AddComponentDialog from "./AddComponentDialog";
+import FormLayout from "./ProductLayout/FormLayout";
+
 
 type initProduct = {
   [K in keyof Product]: Product[K];
@@ -36,13 +38,32 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({
   onClose,
   onSave,
 }) => {
-  const [createdProduct, setCreatedProduct] = useState<Product | null>(null);
+  const [createdProduct, setCreatedProduct] = useState<Product | null>({
+    id: "",
+    name: "",
+    description: "",
+    created: new Date(),
+    updated: new Date(),
+    status: "Active",
+    version: "",
+    item_count: 0,
+    sku: "",
+    bin_location: "",
+    quantity: 0,
+    retail_price: 0,
+    serial_number: "",
+    components: [],
+    images: [],
+    buildable: false,
+    cost_estimate: 0,
+
+  });
 
   // Sample options data, replace it with your own data
   const productList: initProduct[] = [
     {
       id: "1",
-      name: "",
+      name: "test product",
       description: "This is the first product",
       created: new Date(),
       updated: new Date(),
@@ -56,7 +77,7 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({
       serial_number: "123456",
       components: [],
       images: [],
-      buildable: true,
+      buildable: false,
       cost_estimate: 10,
     },
   ];
@@ -79,6 +100,17 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({
     // Reset the form fields after adding the product
     setCreatedProduct(null);
   };
+
+  const handleChangeStatus = (event: React.ChangeEvent<{ value: string }>) => {
+    const newStatus = event.target.value;
+  
+    setCreatedProduct(prevProduct => ({
+      ...prevProduct,
+      status: newStatus,
+      id: prevProduct?.id || "",
+    }));
+  };
+
   // Return JSX
   return (
     <Dialog open={isOpen} onClose={closeDialog} maxWidth="lg" fullWidth>
@@ -87,65 +119,10 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({
         <p></p>
         <br />
         <div>
-          <TextField
-            label="Product Name"
-            value={createdProduct?.name ?? ""}
-            onChange={(e) =>
-              setCreatedProduct((prevProduct) => ({
-                ...prevProduct,
-                name: e.target.value,
-              }))
-            }
-            required
-          />
-        </div>
-        <div>
-          <TextField
-            className="mt-4"
-            label="Product Description"
-            value={createdProduct?.description ?? ""}
-            onChange={(e) =>
-              setCreatedProduct((prevProduct) => ({
-                ...prevProduct,
-                description: e.target.value,
-              }))
-            }
-            required
-          />
-        </div>
-
-        <div>
-          <FormControl className="mt-4">
-            <InputLabel>Set Status</InputLabel>
-            <Select
-              value={createdProduct?.status ?? ""}
-              onChange={(e) =>
-                setCreatedProduct((prevProduct) => ({
-                  ...prevProduct,
-                  status: e.target.value,
-                }))
-              }
-              required
-            >
-              <MenuItem value="Active">Active</MenuItem>
-              <MenuItem value="Inactive">Inactive</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-
-        <div>
-          <TextField
-            className="mt-4"
-            label="Version"
-            value={createdProduct?.version ?? ""}
-            onChange={(e) =>
-              setCreatedProduct((prevProduct) => ({
-                ...prevProduct,
-                version: e.target.value,
-              }))
-            }
-            required
-          />
+          <div className="mb-4">
+            <h1><b>Product Details</b></h1>
+          </div>
+          <FormLayout product={productList[0]} status="Inactive" handleChange={handleChangeStatus} />
         </div>
 
         <div></div>
@@ -173,6 +150,7 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({
         </Button>
       </DialogActions>
     </Dialog>
+
   );
 };
 
